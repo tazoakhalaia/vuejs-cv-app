@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div>
         <h1>hello from home</h1>
     </div>
@@ -8,6 +8,6 @@ export default {
     
 }
 </script>
-<style lang="">
+<style scoped>
     
 </style>

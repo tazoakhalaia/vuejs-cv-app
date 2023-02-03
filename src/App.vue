@@ -1,5 +1,6 @@
 <template>
   <h1>hello</h1>
+  <router-link to="/home"><button>sad</button></router-link>
   <div class="app">
    <router-view />
   </div>
