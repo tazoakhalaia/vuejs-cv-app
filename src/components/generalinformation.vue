@@ -5,7 +5,7 @@
                 <div class="private-info-header">
                     <div class="img-info-title">
                         <router-link to="/"><img @click="goFirstPage" class="gofirstpageimg" src="../assets/gofirstpagebtn.png"></router-link>
-                    <h1 class="info-title">პირადი ინფო</h1>
+                        <h1 class="info-title">პირადი ინფო</h1>
                     </div>
                     <h3 class="page-number">1/3</h3>
                 </div>
@@ -38,7 +38,7 @@
                         <h1>მობილური ნომერი</h1>
                        <input type="text" v-model="phoneText" :class="[phoneText.match(phoneRegex) ? valid : phoneinput]" placeholder="ტელეფონის ნომერი">
                     </div>
-                        <button class="submit-btn" type="submit" :disabled="!isDisabled">შემდეგი</button>
+                        <router-link to="/experience"><button class="submit-btn" type="submit" :disabled="!isDisabled">შემდეგი</button></router-link>
                     </form>
             </div>
         </div>
@@ -55,7 +55,7 @@ export default {
         return {
             surnameinput: "surname-input",
             nameinput: "name-input",
-            valid: "validname-surname",
+            valid: "valid",
             name: "",
             surname: "",
             textareaText: "",
@@ -88,6 +88,9 @@ export default {
         },
         phoneText(newNumber){
             localStorage.setItem("phone_number", newNumber)
+        },
+        textareaText(newTextArea){
+            localStorage.setItem("description", newTextArea)
         }
     },
     mounted(){
@@ -96,6 +99,7 @@ export default {
        this.picture = localStorage.getItem('image') || ""
        this.email = localStorage.getItem("email") || ""
        this.phoneText = localStorage.getItem("phone_number") || ""
+       this.textareaText = localStorage.getItem("description") || ""
     },
     computed: {
         isDisabled(){
@@ -142,7 +146,7 @@ export default {
 
 .info {
     width: 55%;
-    background-color: #dadada;
+    background-color: #f9f9f9;
     float: left;
 }
 
@@ -199,8 +203,8 @@ form {
     justify-content: space-between;
 }
 
-.name-input,
-.surname-input {
+.name-input ,
+.surname-input  {
     width: 390px;
     height: 31px;
     border-radius: 3px;
@@ -208,7 +212,7 @@ form {
     outline: none;
 }
 
-.validname-surname {
+.valid {
     width: 390px;
     height: 31px;
     border-radius: 3px;
