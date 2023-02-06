@@ -42,14 +42,18 @@
                     </form>
             </div>
         </div>
+        <button @click="sendreq">asdsad</button>
+        <button @click="getreq">get</button>
         <div class="resume-design">
             <Resume :nameOfUser ="name" :surname="surname" :userImage="picture" :aboutUser="textareaText" :userEmail="email" :userNumber="phoneText"/>
         </div>
     </div>
 </template>
 <script>
+import axios from 'axios'
 import Vector from '../assets/Vector.png'
 import Resume from '../resume/cv.vue'
+const formData = new FormData()
 export default {
     data(){
         return {
@@ -63,12 +67,35 @@ export default {
             geoRegex: /^[ა-ჰ]+$/g,
             emailRegex: /^\w+([\.-]?\w+)*@redberry.ge/,
             vector: [Vector],
-            picture: null,
+            picture: [],
             emailinput: "email-field input",
             phoneRegex: /^(\+995\d{9})$/,
             phoneText: "",
-            phoneinput: "phone-number input"
-        }
+            phoneinput: "phone-number input",
+            formdata: {
+                "name": "თაზო",
+                "surname": "ახალაია",
+                "email": "sadassa@redberry.ge",
+                "phone_number": "+995595333322",
+                "experiences": [
+    {
+      "position": "back-end developer",
+      "employer": "Redberry",
+      "start_date": "2019/09/09",
+      "due_date": "2020/09/23",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare nunc dui, a pellentesque magna blandit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis diam nisi, at venenatis dolor aliquet vel. Pellentesque aliquet leo nec tortor pharetra, ac consectetur orci bibendum."
+    }
+  ],
+  "educations": [
+    {
+      "institute": "თსუ",
+      "degree": "სტუდენტი",
+      "due_date": "2017/06/25",
+      "description": "სამართლის ფაკულტეტის მიზანი იყო მიგვეღო ფართო თეორიული ცოდნა სამართლის არსის, სისტემის, ძირითადი პრინციპების, სამართლებრივი სისტემების, ქართული სამართლის ისტორიული წყაროების, კერძო, სისხლის და საჯარო სამართლის სფეროების ძირითადი თეორიების, პრინციპებისა და რეგულირების თავისებურებების შესახებ."
+    }
+  ],
+},
+}
     },
     components: {
         Resume
@@ -115,6 +142,7 @@ export default {
     methods: {
         fleupload(e){
             this.picture = e.target.files[0]
+            formData.append("image", this.picture, this.picture.name)
             var reader = new FileReader()
             reader.addEventListener("load", () => {
                  this.picture = reader.result;
@@ -127,7 +155,23 @@ export default {
         foo(e){
             e.preventDefault();
             console.log('nice');
+        },
+        async sendreq(e){
+        e.preventDefault()
+        for(const key in this.formdata){
+            formData.append(key, this.formdata[key])
         }
+        try{
+            const response = await axios.post("https://resume.redberryinternship.ge/api/cvs", formData)
+        console.log(response.data);
+        }catch(er){
+            console.log(er);
+        }
+    },
+    async getreq(){
+        const res = await axios.get("https://resume.redberryinternship.ge/api/cvs")
+        console.log(res.data);
+    }
     }
 }
 </script>

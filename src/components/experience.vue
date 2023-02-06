@@ -36,47 +36,27 @@
                        <textarea placeholder="როლი თანამდებობაზე და ზოგადი აღწერა" ></textarea>
                     </div>
                     <hr>
-                    <!-- <input v-model="newDiv.input1" type="text" />
-    <input v-if="ss"  v-model="newDiv.input2" type="text" />
-    <input v-model="newDiv.input3" type="text" />
-    <input v-model="newDiv.input4" type="text" />
-    <input v-model="newDiv.input5" type="text" />
-    <button @click="addDiv">Add div</button>
-    <div v-for="(item, index) in divs" :key="index">
-      {{ item.input1 }} {{ item.input2 }} {{ item.input3 }} {{ item.input4 }} {{ item.input5 }}
-    </div> -->
-                    <!-- <div class="added-inputs" v-for="(item) in newDiv">
-                    {{ item }} -->
-                        
-                        <!-- <div  class="position" v-for="(position,positionindex) in positions" :key="positionindex">
-                            <h1 class="position-alert">თანამდებოდა</h1>
-                        <input placeholder="დეველოპერი, დიზაინერი ა.შ" />
-                        <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
-                    </div>
-                    <div class="recruiter" v-for="(recruter,recruiterindex) in recruiters" :key="recruiterindex">
-                        <h1>დამსაქმებელი</h1>
-                        <input placeholder="დამსაქმებელი"/>
-                        <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
-                    </div>
-                    <div class="date">
-                        <div class="startdate" v-for="(start,startdateindex) in startdate" :key="startdateindex">
-                            <h1>დაწყების რიცხვი</h1>
-                            <input type="date">
-                        </div>
-                        <div class="enddate" v-for="(end,endindex) in enddate" :key="endindex">
-                            <h1>დამთავრების რიცხვი</h1>
-                            <input type="date">
-                        </div>
-                    </div>
-                    <div class="description" v-for="(textarea,textareIndex) in textareaField" :key="textareIndex">
-                        <h1>აღერა</h1>
-                        <textarea placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"></textarea>
-                    </div> -->
-                    <!-- </div> -->
+                      <div id="container">
+                          <div v-for="(item, index) in divs" :key="index">
+                             <hr style="width: 100%">
+                            <div  class="nn">
+                             <input style="width: 100px; height: 30px; margin-top;" type="text" />
+                             </div>
+                              <div class="nn">
+                                 <input style="width: 10px; height: 30px;" type="text"  />
+                             </div>
+                             <div class="nn">
+                                  <input style="width: 170px; height: 30px;" type="date" />
+                             </div>
+                              <div class="nn">
+                                  <textarea style="width: 120px; height: 30px;" type="text" ></textarea>
+                              </div>
+                            </div>
+                             </div>
                     <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
                         <button class="prev-page">უკან</button>
-                        <button class="submit-btn" type="submit">შემდეგი</button>
+                        <button class="submit-btn" type="submit" @click="sendreq">შემდეგი</button>
                     </div>
                     </form>
             </div>
@@ -85,49 +65,24 @@
 </template>
 <script>
 
+
 export default {
     data(){
         return {
-    //         ss: false,
-    //        positions: [],
-    //        recruiters: [],
-    //        startdate: [],
-    //        enddate: [],
-    //        textareaField: [],
-    //        divs: [],
-    //   newDiv: {
-    //     input1: '',
-    //     input2: '',
-    //     input3: '',
-    //     input4: '',
-    //     input5: ''
-    //   }
+            divs: [],
         }
     },
+    mounted(){
+        if (localStorage.getItem("divs")) {
+      this.divs = JSON.parse(localStorage.getItem("divs"));
+    }
+    },
     methods: {
-        // createAdditionaInputs(e){
-        //     e.preventDefault();
-        //     // this.positions.push({})
-        //     // this.recruiters.push({})
-        //     // this.startdate.push({})
-        //     // this.enddate.push({})
-        //     // this.textareaField.push({})
-        //     // console.log("nice");
-        //     // this.newDiv.push(this.ss)
-        //     // this.ss = ""
-        // },
-//         addDiv(e) {
-// e.preventDefault()
-// this.ss = true
-//       this.divs.push(Object.assign({}, this.newDiv));
-//       this.newDiv = {
-//         input1: '',
-//         input2: '',
-//         input3: '',
-//         input4: '',
-//         input5: ''
-//       }
-//     }
+        createAdditionaInputs(e) {
+            e.preventDefault();
+      this.divs.push('');
+      localStorage.setItem('divs', JSON.stringify(this.divs))
+    }
     }
 }
 </script>
