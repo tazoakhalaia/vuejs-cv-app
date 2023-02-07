@@ -13,7 +13,7 @@
                 <form @submit="foo">
                         <div class="position">
                             <h1 class="position-alert">თანამდებოდა</h1>
-                            <input type="text" placeholder="დეველოპერი, დიზაინერი ა.შ">
+                            <input type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="positionValue">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                     </div>
                     <div class="recruiter">
@@ -32,56 +32,79 @@
                         </div>
                     </div>
                     <div class="description">
-                        <h1>აღერა</h1>
+                        <h1>აღწერა</h1>
                        <textarea placeholder="როლი თანამდებობაზე და ზოგადი აღწერა" ></textarea>
                     </div>
-                    <hr>
                       <div id="container">
                           <div v-for="(item, index) in divs" :key="index">
                              <hr style="width: 100%">
-                            <div  class="nn">
-                             <input style="width: 100px; height: 30px; margin-top;" type="text" />
+                            <div  class="recruiter">
+                                <h1 class="position-alert">თანამდებოდა</h1>
+                            <input type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="newPositionValue[index]">
+                            <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                              </div>
-                              <div class="nn">
-                                 <input style="width: 10px; height: 30px;" type="text"  />
+                              <div class="date">
+                                <div class="startdate">
+                            <h1>დაწყების რიცხვი</h1>
+                       <input type="date" >
+                        </div>
+                        <div class="enddate">
+                            <h1>დამთავრების რიცხვი</h1>
+                            <input type="date" >
+                        </div>
                              </div>
-                             <div class="nn">
-                                  <input style="width: 170px; height: 30px;" type="date" />
-                             </div>
-                              <div class="nn">
-                                  <textarea style="width: 120px; height: 30px;" type="text" ></textarea>
+                              <div class="description">
+                                <h1>აღწერა</h1>
+                                  <textarea type="text" ></textarea>
                               </div>
+                              <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
                              </div>
                     <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
-                        <button class="prev-page">უკან</button>
+                        <router-link to='/generalinformation'><button class="prev-page">უკან</button></router-link>
                         <button class="submit-btn" type="submit" @click="sendreq">შემდეგი</button>
                     </div>
                     </form>
             </div>
         </div>
+        <ExperienceResume :positionValue="positionValue" :newPositionValue="newPositionValue" />
     </div>
 </template>
 <script>
-
-
+import ExperienceResume from '../resume/experienceresume.vue'
 export default {
     data(){
         return {
             divs: [],
+            positionValue: "",
+            newPositionValue: []
         }
+    },
+    watch: {
+        positionValue(newPosition){
+            localStorage.setItem("position", newPosition)
+        }
+    },
+    components: {
+        ExperienceResume
     },
     mounted(){
         if (localStorage.getItem("divs")) {
       this.divs = JSON.parse(localStorage.getItem("divs"));
     }
+    this.positionValue = localStorage.getItem("position")
+    this.newPositionValue - localStorage.getItem("position")
     },
     methods: {
         createAdditionaInputs(e) {
             e.preventDefault();
       this.divs.push('');
       localStorage.setItem('divs', JSON.stringify(this.divs))
+    },
+    removeDiv(index){        
+        this.divs.splice(index,1)
+        localStorage.setItem('divs', JSON.stringify(this.divs))
     }
     }
 }
@@ -266,6 +289,20 @@ form {
     outline: none;
     border: none;
     margin-top: 100px;
+}
+
+.remove {
+    font-family: HelveticaNeue;
+    width: 130px;
+    height: 38px;
+    background-color: #6B40E3;
+    font-family: HelveticaNeue;
+    color: #FFFFFF;
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    margin-top: 20px;
 }
 
 

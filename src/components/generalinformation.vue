@@ -42,8 +42,8 @@
                     </form>
             </div>
         </div>
-        <button @click="sendreq">asdsad</button>
-        <button @click="getreq">get</button>
+        <!-- <button @click="sendreq">asdsad</button>
+        <button @click="getreq">get</button> -->
         <div class="resume-design">
             <Resume :nameOfUser ="name" :surname="surname" :userImage="picture" :aboutUser="textareaText" :userEmail="email" :userNumber="phoneText"/>
         </div>
@@ -73,28 +73,11 @@ export default {
             phoneText: "",
             phoneinput: "phone-number input",
             formdata: {
-                "name": "თაზო",
-                "surname": "ახალაია",
-                "email": "sadassa@redberry.ge",
-                "phone_number": "+995595333322",
-                "experiences": [
-    {
-      "position": "back-end developer",
-      "employer": "Redberry",
-      "start_date": "2019/09/09",
-      "due_date": "2020/09/23",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare nunc dui, a pellentesque magna blandit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis diam nisi, at venenatis dolor aliquet vel. Pellentesque aliquet leo nec tortor pharetra, ac consectetur orci bibendum."
-    }
-  ],
-  "educations": [
-    {
-      "institute": "თსუ",
-      "degree": "სტუდენტი",
-      "due_date": "2017/06/25",
-      "description": "სამართლის ფაკულტეტის მიზანი იყო მიგვეღო ფართო თეორიული ცოდნა სამართლის არსის, სისტემის, ძირითადი პრინციპების, სამართლებრივი სისტემების, ქართული სამართლის ისტორიული წყაროების, კერძო, სისხლის და საჯარო სამართლის სფეროების ძირითადი თეორიების, პრინციპებისა და რეგულირების თავისებურებების შესახებ."
-    }
-  ],
-},
+                name: "თაზო",
+                surname: "ახალაია",
+                email: "sadassa@redberry.ge",
+                phone_number: "+995595333322",
+            },
 }
     },
     components: {
@@ -156,8 +139,42 @@ export default {
             e.preventDefault();
             console.log('nice');
         },
+        ////
         async sendreq(e){
         e.preventDefault()
+        let experiences = [
+            {
+                position: "back-end developer",
+                employer: "Redberry",
+                start_date: "2019/09/09",
+                due_date: "2020/10/10",
+                description: "sakjdl kjasld jlak  asdj hashjkdh kashdk asd"
+            }
+        ]
+        let educations = [
+            {
+                institute: "ტსყ",
+                degree_id: "7",
+                due_date: "2020/10/10",
+                description: "ასჯკდჯალსკდჯლასდკ დკას დასჯდჰკა სდ"
+            }
+        ]
+
+        educations.forEach(el => {
+            formData.append("educations", el.institute)
+            formData.append("educations", el.degree_id)
+            formData.append("educations", el.due_date)
+            formData.append("educations", el.description)
+        })
+        
+        experiences.forEach(element => {
+            formData.append("experiences", element.position)
+            formData.append("experiences", element.employer)
+            formData.append("experiences", element.start_date)
+            formData.append("experiences", element.due_date)
+            formData.append("experiences", element.description)
+        })
+
         for(const key in this.formdata){
             formData.append(key, this.formdata[key])
         }
@@ -168,6 +185,7 @@ export default {
             console.log(er);
         }
     },
+    /////
     async getreq(){
         const res = await axios.get("https://resume.redberryinternship.ge/api/cvs")
         console.log(res.data);
