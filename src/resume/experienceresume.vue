@@ -23,7 +23,9 @@
                 <div style="margin-top: 20px;" class="position-div">
                     <hr style="margin-bottom: 30px">
                     <h1 v-if="positionValue" class="position-text">გამოცდილება</h1>
-            <h2  class="user-position">{{ positionValue }} {{ newPositionValue.join(", ") }}</h2>
+            <h2  class="user-position">{{ positionValue }} {{ newPositionValue.join(", ,") }} {{ recruiterValue }}</h2>
+            <h4 class="date">{{ startDate }}  {{ endDate }}</h4>
+            <h3 class="textarea">{{ textAreaValue}}</h3>
         </div>
             </div>
             <img :src="image" class="userimage" >
@@ -39,7 +41,7 @@ export default {
             phoneNumber: localStorage.getItem("phone_number"),
             email: localStorage.getItem("email"),
             description: localStorage.getItem("description"),
-            image: localStorage.getItem("image")
+            image: localStorage.getItem("image"),
         }
     },
     props: {
@@ -48,9 +50,26 @@ export default {
             require: false
         },
         newPositionValue: {
+            type: Array,
+            require: false
+        },
+        startDate: {
+            type: String,
+            require: false
+        },
+        endDate: {
+            type: String,
+            require: false
+        },
+        recruiterValue: {
+            type: String,
+            require: false
+        },
+        textAreaValue: {
             type: String,
             require: false
         }
+
     }
 }
 </script>
@@ -149,6 +168,21 @@ export default {
     font-weight: bold;
     color: #F93B1D;
     font-family: HelveticaNeue;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+.user-position {
+    font-size: 16px;
+}
+
+.date {
+    font-size: 16px;
+    color: #909090;
+    margin-top: 10px;
+}
+
+.textarea {
+    font-size: 16px;
+    margin-top: 10px;
 }
 </style>

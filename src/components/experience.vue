@@ -13,34 +13,34 @@
                 <form @submit="foo">
                         <div class="position">
                             <h1 class="position-alert">თანამდებოდა</h1>
-                            <input type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="positionValue">
+                            <input type="text" v-bind:class="positionClass" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="positionValue">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                     </div>
                     <div class="recruiter">
                         <h1>დამსაქმებელი</h1>
-                        <input type="text" placeholder="დამსაქმებელი">
+                        <input type="text" v-bind:class="recruiterClass" v-model="recruiteValue" placeholder="დამსაქმებელი">
                         <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                     </div>
                     <div class="date">
                         <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
-                       <input type="date" >
+                       <input type="date" v-model="startDate" >
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date" >
+                            <input type="date" v-model="endDate" >
                         </div>
                     </div>
                     <div class="description">
                         <h1>აღწერა</h1>
-                       <textarea placeholder="როლი თანამდებობაზე და ზოგადი აღწერა" ></textarea>
+                       <textarea v-bind:class="textareaClass" v-model="textAreaValue" placeholder="როლი თანამდებობაზე და ზოგადი აღწერა მინიმუმ 10 სიტყვა" ></textarea>
                     </div>
                       <div id="container">
                           <div v-for="(item, index) in divs" :key="index">
                              <hr style="width: 100%">
                             <div  class="recruiter">
                                 <h1 class="position-alert">თანამდებოდა</h1>
-                            <input type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="newPositionValue[index]">
+                            <input  type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="newPositionValue[index]">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                              </div>
                               <div class="date">
@@ -55,7 +55,7 @@
                              </div>
                               <div class="description">
                                 <h1>აღწერა</h1>
-                                  <textarea type="text" ></textarea>
+                                  <textarea type="text" v-model="ntxtarea[index]" ></textarea>
                               </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
@@ -63,12 +63,18 @@
                     <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
                         <router-link to='/generalinformation'><button class="prev-page">უკან</button></router-link>
-                        <button class="submit-btn" type="submit" @click="sendreq">შემდეგი</button>
+                        <button class="submit-btn" type="submit" @click="sendreq" :disabled="!isDisabledNextPage">შემდეგი</button>
                     </div>
                     </form>
             </div>
         </div>
-        <ExperienceResume :positionValue="positionValue" :newPositionValue="newPositionValue" />
+        <ExperienceResume 
+        :positionValue="positionValue" 
+        :newPositionValue="newPositionValue"  
+        :startDate="startDate" :endDate="endDate" 
+        :recruiterValue="recruiteValue"
+        :textAreaValue="textAreaValue"
+        />
     </div>
 </template>
 <script>
@@ -78,23 +84,76 @@ export default {
         return {
             divs: [],
             positionValue: "",
-            newPositionValue: []
+            newPositionValue: [],
+            ntxtarea: [],
+            valid: "valid",
+            notValid: "notvalid",
+            recruiteValue: "",
+            textAreaValue: "",
+            startDate: "ss",
+            endDate: ""
         }
     },
     watch: {
         positionValue(newPosition){
             localStorage.setItem("position", newPosition)
+        },
+        recruiteValue(newRec){
+            localStorage.setItem("recruiter", newRec)
+        },
+        textAreaValue(newText){
+            localStorage.setItem('textareadecription', newText)
+        },
+        startDate(newStartDate){
+            localStorage.setItem("startdate", newStartDate)
+        },
+        endDate(newEndDate){
+            localStorage.setItem('enddate', newEndDate)
         }
     },
     components: {
         ExperienceResume
     },
+    computed: {
+        positionClass(){
+            if(this.positionValue.length >= 2){
+                return this.valid
+            }else if ( this.positionValue.length > 0 && this.positionValue.length < 2){
+                return this.notValid
+            }
+        },
+        recruiterClass(){
+            if(this.recruiteValue.length >= 2){
+                return this.valid
+            }else if (this.recruiteValue.length > 0 && this.recruiteValue.length < 2){
+                return this.notValid
+            }
+        },
+        textareaClass(){
+            if(this.textAreaValue.length >= 10){
+                return this.valid
+            }else if ( this.textAreaValue.length > 0 &&this.textAreaValue.length < 10){
+                return this.notValid
+            }
+        },
+        isDisabledNextPage(){
+            if(this.positionValue.length >=2 && this.recruiteValue.length >=2 && this.textAreaValue.length >= 10){
+                console.log('nice');
+                return true
+            }else {
+                return false
+            }
+        }
+    },
     mounted(){
         if (localStorage.getItem("divs")) {
       this.divs = JSON.parse(localStorage.getItem("divs"));
     }
-    this.positionValue = localStorage.getItem("position")
-    this.newPositionValue - localStorage.getItem("position")
+    this.positionValue = localStorage.getItem("position") || ""
+    this.recruiteValue = localStorage.getItem("recruiter") || ""
+    this.textAreaValue = localStorage.getItem("textareadecription") || ""
+    this.startDate = localStorage.getItem("startdate") || ""
+    this.endDate = localStorage.getItem("enddate") || ""
     },
     methods: {
         createAdditionaInputs(e) {
@@ -121,6 +180,23 @@ export default {
       src: url('../font/HelveticaNeue.ttc');
     }
    
+.valid {
+    outline: none;
+    background: url('../assets/Vector.png');
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 99% center;
+}
+
+.notvalid {
+    outline: none;
+    background: url('../assets/notallow.png');
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 99% center;
+}
 
 .info {
     width: 55%;
