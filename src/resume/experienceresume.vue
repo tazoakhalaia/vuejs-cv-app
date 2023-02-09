@@ -23,7 +23,7 @@
                 <div style="margin-top: 20px;" class="position-div">
                     <hr style="margin-bottom: 30px">
                     <h1 v-if="positionValue" class="position-text">გამოცდილება</h1>
-            <h2  class="user-position">{{ positionValue }} {{ newPositionValue.join(", ,") }} {{ recruiterValue }}</h2>
+            <h2  class="user-position">{{ positionValue }} {{ newPositionValue.join(" ")}} {{ recruiterValue }}</h2>
             <h4 class="date">{{ startDate }}  {{ endDate }}</h4>
             <h3 class="textarea">{{ textAreaValue}}</h3>
         </div>

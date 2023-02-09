@@ -36,14 +36,12 @@
                     </div>
                     <div class="phone-number">
                         <h1>მობილური ნომერი</h1>
-                       <input type="text" v-model="phoneText" :class="[phoneText.match(phoneRegex) ? valid : phoneinput]" placeholder="ტელეფონის ნომერი">
+                       <input type="text" v-model="phoneText" :class="[phoneText.match(phoneRegex) ? valid : phoneinput]" placeholder="+995 959 16 11 11">
                     </div>
                         <router-link to="/experience"><button class="submit-btn" type="submit" :disabled="!isDisabled">შემდეგი</button></router-link>
                     </form>
             </div>
         </div>
-        <!-- <button @click="sendreq">asdsad</button>
-        <button @click="getreq">get</button> -->
         <div class="resume-design">
             <Resume :nameOfUser ="name" :surname="surname" :userImage="picture" :aboutUser="textareaText" :userEmail="email" :userNumber="phoneText"/>
         </div>
@@ -53,6 +51,7 @@
 import axios from 'axios'
 import Vector from '../assets/Vector.png'
 import Resume from '../resume/cv.vue'
+// /^(\+995\d{9})$/
 const formData = new FormData()
 export default {
     data(){
@@ -69,15 +68,9 @@ export default {
             vector: [Vector],
             picture: [],
             emailinput: "email-field input",
-            phoneRegex: /^(\+995\d{9})$/,
+            phoneRegex: /^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/,
             phoneText: "",
             phoneinput: "phone-number input",
-            formdata: {
-                name: "თაზო",
-                surname: "ახალაია",
-                email: "sadassa@redberry.ge",
-                phone_number: "+995595333322",
-            },
 }
     },
     components: {
@@ -97,7 +90,9 @@ export default {
             localStorage.setItem("email",newEmail)
         },
         phoneText(newNumber){
-            localStorage.setItem("phone_number", newNumber)
+            let newNumberWithNoSpace = newNumber.replace(/ /g,"")
+            localStorage.setItem("phone_number", newNumberWithNoSpace)
+            localStorage.setItem("number", newNumber)
         },
         textareaText(newTextArea){
             localStorage.setItem("description", newTextArea)
@@ -108,14 +103,15 @@ export default {
        this.name = localStorage.getItem("name") || ""
        this.picture = localStorage.getItem('image') || ""
        this.email = localStorage.getItem("email") || ""
-       this.phoneText = localStorage.getItem("phone_number") || ""
+       this.phoneText = localStorage.getItem("number") || ""
        this.textareaText = localStorage.getItem("description") || ""
     },
     computed: {
         isDisabled(){
             if(this.name.match(this.geoRegex) && this.name.length >= 2 
-            && this.surname.match(this.geoRegex) && this.surname.length >= 2 
-            && this.email.match(this.emailRegex) && this.phoneText.match(this.phoneRegex) ){
+            && this.surname.match(this.geoRegex) && this.surname.length >= 2 &&
+            this.picture.length != 0 && this.email.match(this.emailRegex) && 
+            this.phoneText.match(this.phoneRegex)){
                 return true
             }else {
                 return false
@@ -139,57 +135,6 @@ export default {
             e.preventDefault();
             console.log('nice');
         },
-        ////
-        async sendreq(e){
-        e.preventDefault()
-        let experiences = [
-            {
-                position: "back-end developer",
-                employer: "Redberry",
-                start_date: "2019/09/09",
-                due_date: "2020/10/10",
-                description: "sakjdl kjasld jlak  asdj hashjkdh kashdk asd"
-            }
-        ]
-        let educations = [
-            {
-                institute: "ტსყ",
-                degree_id: "7",
-                due_date: "2020/10/10",
-                description: "ასჯკდჯალსკდჯლასდკ დკას დასჯდჰკა სდ"
-            }
-        ]
-
-        educations.forEach(el => {
-            formData.append("educations", el.institute)
-            formData.append("educations", el.degree_id)
-            formData.append("educations", el.due_date)
-            formData.append("educations", el.description)
-        })
-        
-        experiences.forEach(element => {
-            formData.append("experiences", element.position)
-            formData.append("experiences", element.employer)
-            formData.append("experiences", element.start_date)
-            formData.append("experiences", element.due_date)
-            formData.append("experiences", element.description)
-        })
-
-        for(const key in this.formdata){
-            formData.append(key, this.formdata[key])
-        }
-        try{
-            const response = await axios.post("https://resume.redberryinternship.ge/api/cvs", formData)
-        console.log(response.data);
-        }catch(er){
-            console.log(er);
-        }
-    },
-    /////
-    async getreq(){
-        const res = await axios.get("https://resume.redberryinternship.ge/api/cvs")
-        console.log(res.data);
-    }
     }
 }
 </script>

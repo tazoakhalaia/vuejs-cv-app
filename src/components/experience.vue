@@ -33,7 +33,7 @@
                     </div>
                     <div class="description">
                         <h1>აღწერა</h1>
-                       <textarea v-bind:class="textareaClass" v-model="textAreaValue" placeholder="როლი თანამდებობაზე და ზოგადი აღწერა მინიმუმ 10 სიტყვა" ></textarea>
+                       <textarea v-bind:class="textareaClass" v-model="textAreaValue" placeholder="როლი თანამდებობაზე და ზოგადი აღწერა (აუცილებელი)" ></textarea>
                     </div>
                       <div id="container">
                           <div v-for="(item, index) in divs" :key="index">
@@ -63,7 +63,7 @@
                     <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
                         <router-link to='/generalinformation'><button class="prev-page">უკან</button></router-link>
-                        <button class="submit-btn" type="submit" @click="sendreq" :disabled="!isDisabledNextPage">შემდეგი</button>
+                    <router-link to="/education"><button class="submit-btn" type="submit" :disabled="!isDisabledNextPage">შემდეგი</button></router-link>
                     </div>
                     </form>
             </div>
@@ -78,7 +78,9 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 import ExperienceResume from '../resume/experienceresume.vue'
+let formData = new FormData()
 export default {
     data(){
         return {
@@ -109,7 +111,7 @@ export default {
         },
         endDate(newEndDate){
             localStorage.setItem('enddate', newEndDate)
-        }
+        },
     },
     components: {
         ExperienceResume
@@ -130,15 +132,14 @@ export default {
             }
         },
         textareaClass(){
-            if(this.textAreaValue.length >= 10){
+            if(this.textAreaValue.length >= 1){
                 return this.valid
-            }else if ( this.textAreaValue.length > 0 &&this.textAreaValue.length < 10){
+            }else if ( this.textAreaValue.length > 0 &&this.textAreaValue.length < 1){
                 return this.notValid
             }
         },
         isDisabledNextPage(){
-            if(this.positionValue.length >=2 && this.recruiteValue.length >=2 && this.textAreaValue.length >= 10){
-                console.log('nice');
+            if(this.positionValue.length >=2 && this.recruiteValue.length >=2 && this.textAreaValue.length >= 1){
                 return true
             }else {
                 return false
@@ -164,7 +165,10 @@ export default {
     removeDiv(index){        
         this.divs.splice(index,1)
         localStorage.setItem('divs', JSON.stringify(this.divs))
-    }
+    },
+    goFirstPage(){
+        localStorage.clear()
+    },
     }
 }
 </script>
