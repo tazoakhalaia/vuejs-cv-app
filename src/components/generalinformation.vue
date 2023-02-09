@@ -48,11 +48,9 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 import Vector from '../assets/Vector.png'
 import Resume from '../resume/cv.vue'
 // /^(\+995\d{9})$/
-const formData = new FormData()
 export default {
     data(){
         return {
@@ -121,7 +119,6 @@ export default {
     methods: {
         fleupload(e){
             this.picture = e.target.files[0]
-            formData.append("image", this.picture, this.picture.name)
             var reader = new FileReader()
             reader.addEventListener("load", () => {
                  this.picture = reader.result;

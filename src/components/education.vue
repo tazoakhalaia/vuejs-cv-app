@@ -1,6 +1,9 @@
 <template >
         <div>
         <button @click="sendRequest">send request</button>
+        {{ im.name }}
+        <img :src="img">
+        {{ im.experiences[0].position }}
     </div>
 </template>
 <script>
@@ -19,7 +22,9 @@ export default {
             start_date: localStorage.getItem("startdate"),
             enddate: localStorage.getItem("due_date"),
             position: localStorage.getItem("position"),
-            responseData: ""
+            img: localStorage.getItem("image"),
+            responseData: "",
+            im: JSON.parse(localStorage.getItem("response"))
 
 
         }
@@ -39,7 +44,7 @@ export default {
 },
         async sendRequest(){
             var imageData = localStorage.getItem("image")
-    var blob = this.dataURLtoBlob(imageData)
+            var blob = this.dataURLtoBlob(imageData)
         formData.append("name", this.name)
         formData.append("surname", this.surname)
         formData.append("email", this.email)
@@ -62,6 +67,7 @@ export default {
                 }
             })
             this.responseData = response.data
+            localStorage.setItem("response", JSON.stringify(this.responseData))
         console.log(response.data);
         }catch(er){
             console.log(er);

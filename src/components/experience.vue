@@ -78,9 +78,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 import ExperienceResume from '../resume/experienceresume.vue'
-let formData = new FormData()
 export default {
     data(){
         return {
