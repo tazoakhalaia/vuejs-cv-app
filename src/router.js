@@ -3,6 +3,7 @@ import Home from './home.vue'
 import GeneralInfomation from './components/generalinformation.vue'
 import Experience from './components/experience.vue'
 import Education from './components/education.vue'
+import Result from './components/resumeResult.vue'
 
 const routes = [
     {
@@ -24,6 +25,12 @@ const routes = [
         path: "/education",
         name: "Education",
         component: Education,
+      },
+      ,
+      {
+        path: "/result",
+        name: "resemeResult",
+        component: Result,
       }
       
   

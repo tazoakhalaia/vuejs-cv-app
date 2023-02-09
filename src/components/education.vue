@@ -1,9 +1,6 @@
 <template >
         <div>
-        <button @click="sendRequest">send request</button>
-        {{ im.name }}
-        <img :src="img">
-        {{ im.experiences[0].position }}
+        <router-link to="/result"><button @click="sendRequest">send request</button></router-link>
     </div>
 </template>
 <script>
@@ -12,7 +9,6 @@ let formData = new FormData()
 export default {
     data(){
         return{
-            img: "",
             name: localStorage.getItem("name"),
             surname: localStorage.getItem("surname"),
             email: localStorage.getItem("email"),
@@ -22,9 +18,7 @@ export default {
             start_date: localStorage.getItem("startdate"),
             enddate: localStorage.getItem("due_date"),
             position: localStorage.getItem("position"),
-            img: localStorage.getItem("image"),
             responseData: "",
-            im: JSON.parse(localStorage.getItem("response"))
 
 
         }
