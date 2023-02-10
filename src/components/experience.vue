@@ -40,13 +40,13 @@
                              <hr style="width: 100%">
                             <div  class="recruiter">
                                 <h1 class="position-alert">თანამდებოდა</h1>
-                            <input  type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="newPositionValue[index]">
+                            <input  type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="divs[index].value">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                              </div>
                               <div class="date">
                                 <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
-                       <input type="date" >
+                       <input type="date">
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
@@ -55,7 +55,7 @@
                              </div>
                               <div class="description">
                                 <h1>აღწერა</h1>
-                                  <textarea type="text" v-model="ntxtarea[index]" ></textarea>
+                                  <textarea type="text" v-model="divs[index].value2"  ></textarea>
                               </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
@@ -70,7 +70,8 @@
         </div>
         <ExperienceResume 
         :positionValue="positionValue" 
-        :newPositionValue="newPositionValue"  
+        :newPositionValue="divs"  
+        :newTextArea="divs"
         :startDate="startDate" :endDate="endDate" 
         :recruiterValue="recruiteValue"
         :textAreaValue="textAreaValue"
@@ -82,17 +83,18 @@ import ExperienceResume from '../resume/experienceresume.vue'
 export default {
     data(){
         return {
-            divs: [],
+            divs: [{value: "", value2: ""}],
             positionValue: "",
-            newPositionValue: [],
-            ntxtarea: [],
             valid: "valid",
             notValid: "notvalid",
             recruiteValue: "",
             textAreaValue: "",
             startDate: "ss",
-            endDate: ""
+            endDate: "",
         }
+    },
+    components: {
+        ExperienceResume
     },
     watch: {
         positionValue(newPosition){
@@ -110,9 +112,12 @@ export default {
         endDate(newEndDate){
             localStorage.setItem('enddate', newEndDate)
         },
-    },
-    components: {
-        ExperienceResume
+        divs: {
+            handler(newValue){
+                localStorage.setItem("divs", JSON.stringify(newValue));
+            },
+            deep: true
+        }
     },
     computed: {
         positionClass(){
@@ -154,11 +159,14 @@ export default {
     this.startDate = localStorage.getItem("startdate") || ""
     this.endDate = localStorage.getItem("enddate") || ""
     },
+    created(){
+        const savedInputs = JSON.parse(localStorage.getItem("divs") || "[]");
+    this.divs = savedInputs;
+    },
     methods: {
         createAdditionaInputs(e) {
             e.preventDefault();
-      this.divs.push('');
-      localStorage.setItem('divs', JSON.stringify(this.divs))
+      this.divs.push({value: ""});
     },
     removeDiv(index){        
         this.divs.splice(index,1)

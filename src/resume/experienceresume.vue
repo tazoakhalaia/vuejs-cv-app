@@ -23,9 +23,15 @@
                 <div style="margin-top: 20px;" class="position-div">
                     <hr style="margin-bottom: 30px">
                     <h1 v-if="positionValue" class="position-text">გამოცდილება</h1>
-            <h2  class="user-position">{{ positionValue }} {{ newPositionValue.join(" ")}} {{ recruiterValue }}</h2>
+                    <div class="allposition" style="display: flex;">
+            <h2  class="user-position">{{ positionValue }} {{ recruiterValue }}</h2>
+            <h1 v-for="(item,index) in newPositionValue">{{ item.value}}</h1>
+        </div>
             <h4 class="date">{{ startDate }}  {{ endDate }}</h4>
-            <h3 class="textarea">{{ textAreaValue}}</h3>
+            <div class="textarera">
+                <h3 class="textarea">{{ textAreaValue}}</h3>
+                <h2 v-for="(text,index) in newTextArea">{{ text.value2 }}</h2>
+            </div>
         </div>
             </div>
             <img :src="image" class="userimage" >
@@ -67,6 +73,10 @@ export default {
         },
         textAreaValue: {
             type: String,
+            require: false
+        },
+        newTextArea: {
+            type: Array,
             require: false
         }
 
