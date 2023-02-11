@@ -19,7 +19,7 @@
                         <div class="degree">
                             <h1>ხარისხი</h1>
                        <select v-model="degreeValue">
-                        <option v-for="(item,index) in degreeResponse" :value="item.id" :key="index">{{ item.title }}</option>
+                        <option v-for="(item,index) in degreeResponse" :value="item.id"  :key="index">{{ item.title }}</option>
                        </select>
                         </div>
                         <div class="enddate">
@@ -108,8 +108,8 @@ export default {
         instute(newInstitute){
             localStorage.setItem("institue", newInstitute)
         },
-        educationdesc(newEd){
-            localStorage.setItem("educationdesc", newEd)
+        educationdesc(newDesc){
+            localStorage.setItem("educationdesc", newDesc)
         },
         duedate(newDueDate){
             localStorage.setItem("educationduedate", newDueDate)

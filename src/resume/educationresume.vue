@@ -22,9 +22,16 @@
                 </div>
                 <hr style="background-color: black; margin-top: 20px; margin-bottom: 10px;">
         <div class="experience-div">
-            <h1 class="position">გამოცდილება</h1>
+            <h1 class="position" style="font-size: 18px;">გამოცდილება</h1>
+            {{ startDate }}
             <h1 class="pos-rec">{{ position }} {{ recruiter }}</h1>
             <h2 class="experiencedesc">{{ experienceDescription }}</h2>
+        </div>
+        <hr>
+        <div class="education-div">
+            {{ institute }}
+            {{ due_date }}
+            {{ educdesc }}
         </div>
             </div>
             <img :src="image" class="userimage" >
@@ -45,7 +52,10 @@ export default {
             recruiter: localStorage.getItem("recruiter"),
             startDate: localStorage.getItem("startdate"),
             endDate: localStorage.getItem("enddate"),
-            experienceDescription: localStorage.getItem("textareadecription")
+            experienceDescription: localStorage.getItem("textareadecription"),
+            institute: localStorage.getItem("institue"),
+            due_date: localStorage.getItem("educationduedate"),
+            educdesc: localStorage.getItem("educationdesc")
         }
     },
     props: {
