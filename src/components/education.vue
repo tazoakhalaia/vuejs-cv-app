@@ -12,24 +12,24 @@
                 <form @submit="foo">
                         <div class="instute">
                             <h1 class="instute-alert">სასწავლებელი</h1>
-                            <input type="text" placeholder="სასწავლებელი">
+                            <input type="text" placeholder="სასწავლებელი" v-model="instute">
                             <h6 class="warning">მინიმუმ 2 ასო</h6>
                     </div>
                     <div class="date-degree">
                         <div class="degree">
                             <h1>ხარისხი</h1>
                        <select v-model="degreeValue">
-                        <option v-for="(item,index) in degreeResponse" :key="index">{{item}}</option>
+                        <option v-for="(item,index) in degreeResponse" :value="item.id" :key="index">{{ item.title }}</option>
                        </select>
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date"  >
+                            <input type="date" v-model="duedate"  >
                         </div>
                     </div>
                     <div class="description">
                         <h1>აღწერა</h1>
-                       <textarea v-bind:class="textareaClass" v-model="textAreaValue" placeholder="განათლების აღწერა" ></textarea>
+                       <textarea v-bind:class="textareaClass" v-model="educationdesc" placeholder="განათლების აღწერა" ></textarea>
                     </div>
                       <div id="container" v-for="(item, index) in edu">
                           <div  :key="index">
@@ -56,10 +56,10 @@
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
                              </div>
-                    <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
+                             <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
                         <router-link to='/experience'><button class="prev-page">უკან</button></router-link>
-                     <router-link to="/result"><button class="submit-btn" @click="sendRequest">send request</button></router-link>
+                        <button class="submit-btn" @click="sendRequest">send request</button>
                     </div>
                     </form>
             </div>
@@ -69,6 +69,7 @@
 <script>
 import axios from 'axios'
 import EducationResume from '../resume/educationresume.vue'
+import store from '../store/index'
 let formData = new FormData()
 export default {
     data(){
@@ -82,10 +83,16 @@ export default {
             start_date: localStorage.getItem("startdate"),
             enddate: localStorage.getItem("due_date"),
             position: localStorage.getItem("position"),
+            degree_id: JSON.parse(localStorage.getItem("degree")),
+            recruiter: localStorage.getItem("recruiter"),
+            degree_id: localStorage.getItem("degree"),
             responseData: "",
             edu: [],
             degreeResponse: [],
-            degreeValue: ""
+            degreeValue: "",
+            instute: "",
+            duedate: "",
+            educationdesc: ""
 
 
         }
@@ -95,20 +102,33 @@ export default {
     },
     watch: {
         degreeValue(newDegree){
+            console.log(newDegree);
             localStorage.setItem("degree", newDegree)
+        },
+        instute(newInstitute){
+            localStorage.setItem("institue", newInstitute)
+        },
+        educationdesc(newEd){
+            localStorage.setItem("educationdesc", newEd)
+        },
+        duedate(newDueDate){
+            localStorage.setItem("educationduedate", newDueDate)
         }
     },
     mounted(){
         if (localStorage.getItem("educationdivs")) {
       this.edu = JSON.parse(localStorage.getItem("educationdivs"));
     }
-        this.degreeValue = localStorage.getItem("degree")
+    this.instute = localStorage.getItem("institue") || ""
+    this.educationdesc = localStorage.getItem("educationdesc") || ""
+    this.degreeValue = localStorage.getItem("degree") || ""
+    this.duedate = localStorage.getItem("educationduedate") || ""
     },
     created(){
         axios.get('https://resume.redberryinternship.ge/api/degrees').then(res => {
             let degreeValue = res.data
             for(var i = 0; i < degreeValue.length; i++){
-                this.degreeResponse.push(degreeValue[i].title)
+                this.degreeResponse.push(degreeValue[i])
             }
         })
     },
@@ -135,7 +155,8 @@ export default {
     type: mime
   });
 },
-        async sendRequest(){
+        async sendRequest(e){
+            e.preventDefault()
             var imageData = localStorage.getItem("image")
             var blob = this.dataURLtoBlob(imageData)
         formData.append("name", this.name)
@@ -145,14 +166,14 @@ export default {
         formData.append("about_me", "kaia")
         formData.append("image",  blob, 'image.' + blob.type.split('/')[1]);
         formData.append("experiences[0][position]", this.position)
-        formData.append("experiences[0][employer]", "redbery")
-        formData.append("experiences[0][start_date]", "2020/10/10")
-        formData.append("experiences[0][due_date]", "2021/10/10")
-        formData.append("experiences[0][description]", "asdsads kaksdjha s")
-        formData.append("educations[0][institute]", "ასდასდ")
-        formData.append("educations[0][degree_id]", "7")
-        formData.append("educations[0][due_date]", "2020/10/10")
-        formData.append("educations[0][description]", "asdsads kaksdjha s")
+        formData.append("experiences[0][employer]", this.recruiter)
+        formData.append("experiences[0][start_date]", this.start_date)
+        formData.append("experiences[0][due_date]", this.start_date)
+        formData.append("experiences[0][description]", this.experienceDescription)
+        formData.append("educations[0][institute]", this.instute)
+        formData.append("educations[0][degree_id]", this.degree_id)
+        formData.append("educations[0][due_date]", this.duedate)
+        formData.append("educations[0][description]", this.educationdesc)
         try{
             const response = await axios.post("https://resume.redberryinternship.ge/api/cvs", formData, {
                 headers: {
@@ -160,12 +181,14 @@ export default {
                 }
             })
             this.responseData = response.data
-            localStorage.setItem("response", JSON.stringify(this.responseData))
+            store.commit("updateInfo",this.responseData)
+            localStorage.setItem("response", this.responseData)
         console.log(response.data);
         }catch(er){
             console.log(er);
         }
-    }
+        this.$router.push({path: "/result"})
+    },
     }
 }
 </script>

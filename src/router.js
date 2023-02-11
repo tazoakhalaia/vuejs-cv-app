@@ -29,7 +29,7 @@ const routes = [
       ,
       {
         path: "/result",
-        name: "resemeResult",
+        name: "resumeResult",
         component: Result,
       }
       

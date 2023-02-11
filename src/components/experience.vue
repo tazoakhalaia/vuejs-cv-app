@@ -24,11 +24,11 @@
                     <div class="date">
                         <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
-                       <input type="date" v-model="startDate" >
+                       <input type="date" v-model="startDate" v-bind:class="startdateInput" >
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date" v-model="endDate" >
+                            <input type="date" v-model="endDate"  v-bind:class="endInput">
                         </div>
                     </div>
                     <div class="description">
@@ -46,7 +46,7 @@
                               <div class="date">
                                 <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
-                       <input type="date">
+                       <input type="date" >
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
@@ -87,9 +87,10 @@ export default {
             positionValue: "",
             valid: "valid",
             notValid: "notvalid",
+            initial: "initial",
             recruiteValue: "",
             textAreaValue: "",
-            startDate: "ss",
+            startDate: "",
             endDate: "",
         }
     },
@@ -125,6 +126,8 @@ export default {
                 return this.valid
             }else if ( this.positionValue.length > 0 && this.positionValue.length < 2){
                 return this.notValid
+            }else if(this.positionValue.length == 0){
+                return this.initial
             }
         },
         recruiterClass(){
@@ -132,6 +135,8 @@ export default {
                 return this.valid
             }else if (this.recruiteValue.length > 0 && this.recruiteValue.length < 2){
                 return this.notValid
+            }else if(this.recruiteValue.length == 0){
+                return this.initial
             }
         },
         textareaClass(){
@@ -139,8 +144,20 @@ export default {
                 return this.valid
             }else if ( this.textAreaValue.length > 0 &&this.textAreaValue.length < 1){
                 return this.notValid
+            }else if(this.positionValue.length == 0){
+                return this.initial
             }
         },
+        startdateInput(){
+            if(this.startDate != ""){
+                return this.valid
+            }
+            },
+            endInput(){
+                if(this.endDate != ""){
+                return this.valid
+            }
+            },
         isDisabledNextPage(){
             if(this.positionValue.length >=2 && this.recruiteValue.length >=2 && this.textAreaValue.length >= 1){
                 return true
@@ -197,6 +214,13 @@ export default {
     background-repeat: no-repeat;
     background-size: 20px 20px;
     background-position: 99% center;
+    border: 1px solid #76f776;
+}
+
+.initial {
+    border-radius: 3px;
+    border: none;
+    outline: none;
 }
 
 .notvalid {
@@ -206,6 +230,7 @@ export default {
     background-repeat: no-repeat;
     background-size: 20px 20px;
     background-position: 99% center;
+    border: 1px solid red;
 }
 
 .info {
@@ -266,10 +291,8 @@ form {
     height: 31px;
     border-radius: 3px;
     outline: none;
-    border: 0.5px solid grey;
     margin-top: 10px;
 }
-
 .position-alert {
     font-size: 18px;
 }
@@ -292,7 +315,6 @@ form {
     height: 31px;
     border-radius: 3px;
     outline: none;
-    border: 0.5px solid grey;
     margin-top: 10px;
 }
 

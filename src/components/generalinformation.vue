@@ -14,17 +14,17 @@
                     <div class="name-surname">
                         <div class="name">
                             <h1 class="name-surname-field">სახელი</h1>
-                            <input :class="[name.match(geoRegex) && name.length >=2 ? valid : nameinput]" type="text" v-model="name" placeholder="სახელი">
+                            <input v-bind:class="nameInput" type="text" v-model="name" placeholder="სახელი">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                         </div>
                         <div class="surname">
                             <h1 class="name-surname-field">გვარი</h1>
-                            <input :class="[surname.match(geoRegex) && surname.length >=2  ? valid : surnameinput]" type="text" v-model="surname" placeholder="გვარი">
+                            <input v-bind:class="surnameInput" type="text" v-model="surname" placeholder="გვარი">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                         </div>
                     </div>
                     <div class="upload-picture">
-                        <span class="uploadphoto">პირადი ფოტოს ატვირთვა</span><input type="file" @change="fleupload" >
+                        <span class="uploadphoto">პირადი ფოტოს ატვირთვა</span><input v-bind:class="uploadphoto" type="file" @change="fleupload" >
                     </div>
                     <div class="about-me">
                         <h1>ჩემს შესახებ (არასავალდებულო)</h1>
@@ -32,11 +32,11 @@
                     </div>
                     <div class="email-field">
                         <h1>ელ.ფოსტა</h1>
-                       <input type="text" v-model="email" :class="[email.match(emailRegex) ? valid : emailinput]" placeholder="ელ.ფოსტა">
+                       <input type="text" v-model="email" v-bind:class="emailInput" placeholder="ელ.ფოსტა">
                     </div>
                     <div class="phone-number">
                         <h1>მობილური ნომერი</h1>
-                       <input type="text" v-model="phoneText" :class="[phoneText.match(phoneRegex) ? valid : phoneinput]" placeholder="+995 959 16 11 11">
+                       <input type="text" v-model="phoneText" v-bind:class="phoneInput" placeholder="+995 959 16 11 11">
                     </div>
                         <router-link to="/experience"><button class="submit-btn" type="submit" :disabled="!isDisabled">შემდეგი</button></router-link>
                     </form>
@@ -54,9 +54,9 @@ import Resume from '../resume/cv.vue'
 export default {
     data(){
         return {
-            surnameinput: "surname-input",
-            nameinput: "name-input",
+            notvalid: "notvalid",
             valid: "valid",
+            initial : "initial",
             name: "",
             surname: "",
             textareaText: "",
@@ -68,7 +68,6 @@ export default {
             emailinput: "email-field input",
             phoneRegex: /^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/,
             phoneText: "",
-            phoneinput: "phone-number input",
 }
     },
     components: {
@@ -111,8 +110,52 @@ export default {
             this.picture.length != 0 && this.email.match(this.emailRegex) && 
             this.phoneText.match(this.phoneRegex)){
                 return true
-            }else {
+            }
+            else {
                 return false
+            }
+        },
+        nameInput(){
+            if(this.name.length >= 2 && this.name.match(this.geoRegex)){
+                return this.valid
+            }else if(this.name.length == 0){
+                return this.initial
+            }else {
+                return this.notvalid
+            }
+        },
+        surnameInput(){
+            if(this.surname.length >= 2 && this.surname.match(this.geoRegex)){
+                return this.valid
+            }else if(this.surname.length == 0){
+                return this.initial
+            }else {
+                return this.notvalid
+            }
+        },
+        uploadphoto(){
+            if(this.picture.length !=0){
+                return this.valid
+            }else {
+                return this.notvalid
+            }
+        },
+        emailInput(){
+            if(this.email.match(this.emailRegex)){
+                return this.valid
+            }else if(this.email.length == 0){
+                return this.initial
+            }else{
+                return this.notvalid
+            }
+        },
+        phoneInput(){
+            if(this.phoneText.match(this.phoneRegex)){
+                return this.valid
+            }else if(this.phoneText.length == 0){
+                return this.initial
+            }else{
+                return this.notvalid
             }
         }
     },
@@ -207,22 +250,34 @@ form {
     justify-content: space-between;
 }
 
-.name-input ,
-.surname-input  {
+.name input ,
+.surname input  {
     width: 390px;
     height: 31px;
     border-radius: 3px;
-    border: none;
     outline: none;
 }
 
 .valid {
-    width: 390px;
-    height: 31px;
     border-radius: 3px;
     border: 1px solid #76f776;
     outline: none;
     background: url('../assets/Vector.png');
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 99% center;
+}
+
+.initial {
+    border-radius: 3px;
+    border: none;
+    outline: none;
+}
+.notvalid {
+    outline: none;
+    border: 1px solid red;
+    background: url('../assets/notallow.png');
     background-color: white;
     background-repeat: no-repeat;
     background-size: 20px 20px;
@@ -325,7 +380,6 @@ input[type="file"]::-webkit-file-upload-button {
     height: 35px;
     border-radius: 3px;
     outline: none;
-    border: 0.5px solid grey;
     margin-top: 10px;
   }
   .phone-number {
@@ -336,8 +390,6 @@ input[type="file"]::-webkit-file-upload-button {
     width: 100%;
     height: 35px;
     border-radius: 3px;
-    outline: none;
-    border: 0.5px solid grey;
     margin-top: 10px;
   }
 
