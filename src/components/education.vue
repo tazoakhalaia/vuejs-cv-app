@@ -37,25 +37,25 @@
                              <hr style="width: 100%">
                             <div style="margin-top: 20px;" class="instute">
                                 <h1 class="instute-alert">სასწავლებელი</h1>
-                            <input  type="text" placeholder="სასწავლებელი">
+                            <input  type="text" placeholder="სასწავლებელი" :class="[edu[index].value.length >= 2 ? valid : notvalid]" v-model="edu[index].value">
                             <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
                              </div>
                              <div class="date-degree">
                         <div class="degree">
                             <h1>ხარისხი</h1>
-                       <select v-model="degreeValue">
+                       <select v-model="edu[index].value2">
                         <option value="" disabled selected>აირჩიეთ ხარისხი</option>
                         <option v-for="(item,index) in degreeResponse" :value="item.id"  :key="index">{{ item.title }}</option>
                        </select>
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date" v-model="duedate" >
+                            <input type="date" :class="[edu[index].value3 != 0 ? valid : notvalid]" v-model="edu[index].value3" >
                         </div>
                     </div>
                     <div class="description">
                         <h1>აღწერა</h1>
-                       <textarea placeholder="განათლების აღწერა" ></textarea>
+                       <textarea placeholder="განათლების აღწერა" :class="[edu[index].value4 != 0 ? valid : notvalid]" v-model="edu[index].value4" ></textarea>
                     </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
@@ -68,7 +68,13 @@
                     </form>
             </div>
         </div>
-        <EducationResume :institute="instute" :duedate="duedate" :educationDescription="educationdesc" />
+        <EducationResume 
+        :institute="instute" 
+        :duedate="duedate" 
+        :educationDescription="educationdesc" 
+        :newInstitute="edu" 
+        :newDate="edu" 
+        :newEducationDesc="edu"/>
 </template>
 <script>
 import axios from 'axios'
@@ -89,7 +95,7 @@ export default {
             position: localStorage.getItem("position"),
             recruiter: localStorage.getItem("recruiter"),
             responseData: "",
-            edu: [{va: "", value2: "", value3: "",value4: ""}],
+            edu: [{value: "", value2: "", value3: "",value4: ""}],
             degreeResponse: [],
             degreeValue: "",
             instute: "",
@@ -98,7 +104,9 @@ export default {
             valid: "valid",
             notvalid: "notvalid",
             initial: "initiial",
-            degreeText: ""
+            degreeText: "",
+            valid: "valid",
+            notvalid: "notvalid"
 
 
         }
@@ -127,6 +135,12 @@ export default {
                 this.$router.push({path: "/result"})
             }
             }
+        },
+        edu: {
+            handler(newValue){
+                localStorage.setItem("educationdivs", JSON.stringify(newValue));
+            },
+            deep: true
         }
     },
     computed: {
@@ -173,7 +187,7 @@ export default {
     methods: {
         createAdditionaInputs(e) {
             e.preventDefault()
-            this.edu.push({va: "", value2: "", value3: "",value4: ""});
+            this.edu.push({value: "", value2: "", value3: "",value4: ""});
             localStorage.setItem('educationdivs', JSON.stringify(this.edu))
         },
         removeDiv(index){

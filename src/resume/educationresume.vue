@@ -37,13 +37,16 @@
         <div class="education-div">
             <h1 v-if="institute || duedate || educationDescription">განათლება</h1>
             <div class="inst">
-                <h2>{{ institute }}</h2>
+                <h2>{{ institute }} </h2>
+                <h2 v-for="(inst,index) in newInstitute">{{ inst.value }}</h2>
             </div>
             <div class="due-date">
                 <h3>{{ duedate }}</h3>
+                <h3 v-for="(datenumber,index) in newDate ">{{ datenumber.value3 }}</h3>
             </div>
             <div class="educationdescription">
                <p>{{ educationDescription }}</p>
+               <p v-for="(newdesc,index) in newEducationDesc">{{ newdesc.value4 }}</p>
             </div>
         </div>
             </div>
@@ -80,6 +83,18 @@ export default {
         },
         educationDescription: {
             type: String,
+            required: false
+        },
+        newInstitute: {
+            type: Array,
+            required: false
+        },
+        newDate: {
+            type: Array,
+            required: false
+        },
+        newEducationDesc: {
+            type: Array,
             required: false
         }
 
