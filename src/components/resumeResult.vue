@@ -4,11 +4,11 @@
         <div class="gofirstpageicon">
             <img @click="goFirstPage" src="../assets/gofirstpagebtn.png" >
         </div>
-        <div class="resume">
+        <div class="resume" >
             <div class="resume-mid">
-            <div class="generalinfo">
-                <div class="name-surname">
-                    <div class="n-s">
+            <div class="generalinfo" >
+                <div class="name-surname" style=" word-break: break-all;" >
+                    <div class="n-s" > 
                     <h1>{{ cvResult.name }}</h1>
                     <h1 style="margin-left: 20px;">{{ cvResult.surname }}</h1>
                 </div>
@@ -28,7 +28,7 @@
                 </div>
                 <hr style="margin-top: 30px;"> 
             </div>
-            <div class="experience-info">
+            <div class="experience-info" style=" word-break: break-all;" >
                 <h1>გამოცდილება</h1>
                 <div class="position-recruiter">
                     <h2>{{ cvResult.experiences[0].position }}</h2>
@@ -43,7 +43,7 @@
                 </div>
                 <hr style="margin-top: 30px;">
             </div>
-            <div class="education-info">
+            <div class="education-info" style=" word-break: break-all;" >
                 <h1>განათლება</h1>
                 <div class="institute-degree">
                 <h2>{{ cvResult.educations[0].institute }}</h2>
@@ -53,7 +53,7 @@
                 <h3>{{ cvResult.educations[0].due_date }}</h3>
             </div>
             <div class="education-desc">
-                <p>askdjhakjd</p>
+                <p>{{ cvResult.educations[0].description }}</p>
             </div>
             </div>
         </div>

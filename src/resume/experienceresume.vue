@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; justify-content: center;">
-        <div class="resume-container">
-            <div class="left-side">
+        <div class="resume-container" >
+            <div class="left-side" style=" word-break:break-all;">
                 <h1 class="username">{{ userName }} {{ surName }}</h1>
                 <div class="user-email-phone">
                     <div  class="emaillogo">

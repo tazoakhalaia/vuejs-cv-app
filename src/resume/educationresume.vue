@@ -121,7 +121,7 @@ export default {
 .left-side {
     float: left;
     width: 50%;
-    word-wrap: break-word ;
+    word-break: break-all ;
     margin-left: 100px;
     padding-bottom: 100%;
 }

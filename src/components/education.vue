@@ -21,7 +21,7 @@
                        <select v-model="degreeValue">
                         <option value="" disabled selected>აირჩიეთ ხარისხი</option>
                         <option v-for="(item,index) in degreeResponse" :value="item.id"  :key="index">{{ item.title }}</option>
-                       </select>
+                       </select>{{ degreeText }}
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="description">
                         <h1>აღწერა</h1>
-                       <textarea v-bind:class="textareaClass" v-model="educationdesc" placeholder="განათლების აღწერა" ></textarea>
+                       <textarea placeholder="განათლების აღწერა" ></textarea>
                     </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
@@ -85,10 +85,9 @@ export default {
             generalDescription: localStorage.getItem("description"),
             experienceDescription: localStorage.getItem("textareadecription"),
             start_date: localStorage.getItem("startdate"),
-            enddate: localStorage.getItem("due_date"),
+            enddate: localStorage.getItem("enddate"),
             position: localStorage.getItem("position"),
             recruiter: localStorage.getItem("recruiter"),
-            degree_id: JSON.parse(localStorage.getItem("degree")),
             responseData: "",
             edu: [{va: "", value2: "", value3: "",value4: ""}],
             degreeResponse: [],
@@ -98,7 +97,8 @@ export default {
             educationdesc: "",
             valid: "valid",
             notvalid: "notvalid",
-            initial: "initiial"
+            initial: "initiial",
+            degreeText: ""
 
 
         }
@@ -158,6 +158,7 @@ export default {
         this.educationdesc = localStorage.getItem("educationdesc") || ""
         this.degreeValue = localStorage.getItem("degree") || ""
         this.duedate = localStorage.getItem("educationduedate") || ""
+        console.log(this.enddate);
     },
     created(){
         axios.get('https://resume.redberryinternship.ge/api/degrees').then(res => {
@@ -173,6 +174,7 @@ export default {
         createAdditionaInputs(e) {
             e.preventDefault()
             this.edu.push({va: "", value2: "", value3: "",value4: ""});
+            localStorage.setItem('educationdivs', JSON.stringify(this.edu))
         },
         removeDiv(index){
             this.edu.splice(index,1)
@@ -203,7 +205,7 @@ export default {
                 formData.append("experiences[0][position]", this.position)
                 formData.append("experiences[0][employer]", this.recruiter)
                 formData.append("experiences[0][start_date]", this.start_date)
-                formData.append("experiences[0][due_date]", this.start_date)
+                formData.append("experiences[0][due_date]", this.enddate)
                 formData.append("experiences[0][description]", this.experienceDescription)
                 formData.append("educations[0][institute]", this.instute)
                 formData.append("educations[0][degree_id]", this.degreeValue)
