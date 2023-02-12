@@ -20,18 +20,19 @@
                 <div class="resume-bottom-logo">
                     <img src="../assets/LOGO.png" alt="">
                 </div>
-                <div style="margin-top: 20px;" class="position-div">
+                <div style="margin-top: 20px; " class="position-div">
                     <hr style="margin-bottom: 30px">
                     <h1 v-if="positionValue" class="position-text">გამოცდილება</h1>
                     <div class="allposition" style="display: flex;">
             <h2  class="user-position">{{ positionValue }}</h2>
-            <h1 v-for="(item,index) in newPositionValue">{{ item.value}}</h1>
+            <h1 style="margin-left: 10px;" v-for="(item,index) in newPositionValue">{{ item.value }}</h1>
             <h3>{{ recruiterValue }}</h3>
+            <h3  v-for="(item,index) in newRecruiter" >{{ item.value5 }}</h3>
         </div>
             <h4 class="date">{{ startDate }}  {{ endDate }}</h4>
-            <div class="textareas" style="display: flex;">
+            <div class="textareas" >
                 <h3 class="textarea">{{ textAreaValue}}</h3>
-                <h3 style="margin-left: 10px;" v-for="(text,index) in newTextArea">{{ text.value2 }}</h3>
+                <h3 v-for="(text,index) in newTextArea">{{ text.value2 }}</h3>
             </div>
         </div>
             </div>
@@ -77,6 +78,10 @@ export default {
             require: false
         },
         newTextArea: {
+            type: Array,
+            require: false
+        },
+        newRecruiter: {
             type: Array,
             require: false
         }
@@ -199,7 +204,6 @@ export default {
 
 
 .allposition h1{
-    margin-left: 10px;
     font-size: 16px;
 }
 

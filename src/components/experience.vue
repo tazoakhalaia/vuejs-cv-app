@@ -39,11 +39,16 @@
                       <div id="container">
                           <div v-for="(item, index) in divs" :key="index">
                              <hr style="width: 100%">
-                            <div  class="recruiter">
+                            <div  style="margin-top: 10px;" class="position">
                                 <h1 class="position-alert">თანამდებოდა</h1>
                             <input  type="text" :class="[divs[index].value.length >= 2 ? valid : notValid]" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="divs[index].value">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                              </div>
+                             <div class="recruiter">
+                        <h1>დამსაქმებელი</h1>
+                        <input type="text" :class="[divs[index].value5.length >= 2 ? valid : notValid]"  v-model="divs[index].value5" placeholder="დამსაქმებელი">
+                        <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
+                    </div>
                               <div class="date">
                                 <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
@@ -73,6 +78,7 @@
         :positionValue="positionValue" 
         :newPositionValue="divs"  
         :newTextArea="divs"
+        :newRecruiter="divs"
         :startDate="startDate" :endDate="endDate" 
         :recruiterValue="recruiteValue"
         :textAreaValue="textAreaValue"
@@ -84,7 +90,7 @@ import ExperienceResume from '../resume/experienceresume.vue'
 export default {
     data(){
         return {
-            divs: [{value: "", value2: "", value3: "",value4: ""}],
+            divs: [{value: "", value2: "", value3: "",value4: "", value5: ""}],
             positionValue: "",
             valid: "valid",
             notValid: "notvalid",
@@ -177,7 +183,7 @@ export default {
     methods: {
         createAdditionaInputs(e) {
             e.preventDefault();
-      this.divs.push({value: "", value2: "", value3: "",value4: ""});
+      this.divs.push({value: "", value2: "", value3: "",value4: "", value5: ""});
     },
     removeDiv(index){        
         this.divs.splice(index,1)
