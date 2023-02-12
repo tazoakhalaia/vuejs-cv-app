@@ -2,7 +2,7 @@
     <div style="display: flex; justify-content: space-between; padding-top: 30px; ">
         <div class="left-side" style="width: 75%; display: flex; justify-content: space-between;">
         <div class="gofirstpageicon">
-            <img src="../assets/gofirstpagebtn.png" >
+            <img @click="goFirstPage" src="../assets/gofirstpagebtn.png" >
         </div>
         <div class="resume">
             <div class="resume-mid">
@@ -80,7 +80,11 @@ export default {
     methods: {
         closeAlert(){
             this.$refs.successmessage.style.display = "none"
-        }
+        },
+        goFirstPage(){
+                localStorage.clear()
+                this.$router.push({ path: "/" })
+            }
     }
 }
 </script>

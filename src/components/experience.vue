@@ -14,12 +14,12 @@
                         <div class="position">
                             <h1 class="position-alert">თანამდებოდა</h1>
                             <input type="text" v-bind:class="positionClass" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="positionValue">
-                            <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
+                            <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
                     </div>
                     <div class="recruiter">
                         <h1>დამსაქმებელი</h1>
                         <input type="text" v-bind:class="recruiterClass" v-model="recruiteValue" placeholder="დამსაქმებელი">
-                        <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
+                        <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
                     </div>
                     <div class="date">
                         <div class="startdate">
@@ -35,27 +35,28 @@
                         <h1>აღწერა</h1>
                        <textarea v-bind:class="textareaClass" v-model="textAreaValue" placeholder="როლი თანამდებობაზე და ზოგადი აღწერა (აუცილებელი)" ></textarea>
                     </div>
+                    <!---addeddiv-->
                       <div id="container">
                           <div v-for="(item, index) in divs" :key="index">
                              <hr style="width: 100%">
                             <div  class="recruiter">
                                 <h1 class="position-alert">თანამდებოდა</h1>
-                            <input  type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="divs[index].value">
+                            <input  type="text" :class="[divs[index].value.length >= 2 ? valid : notValid]" placeholder="დეველოპერი, დიზაინერი ა.შ" v-model="divs[index].value">
                             <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
                              </div>
                               <div class="date">
                                 <div class="startdate">
                             <h1>დაწყების რიცხვი</h1>
-                       <input type="date" >
+                       <input type="date" :class="[divs[index].value3 != 0 ? valid : notValid]" v-model="divs[index].value3" >
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date" >
+                            <input type="date" :class="[divs[index].value4 != 0 ? valid : notValid]" v-model="divs[index].value4" >
                         </div>
                              </div>
                               <div class="description">
                                 <h1>აღწერა</h1>
-                                  <textarea type="text" v-model="divs[index].value2"  ></textarea>
+                                  <textarea type="text" :class="[divs[index].value2 != 0 ? valid : notValid]" v-model="divs[index].value2"  ></textarea>
                               </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
@@ -63,7 +64,7 @@
                     <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
                     <div class="prev-next-btn">
                         <router-link to='/generalinformation'><button class="prev-page">უკან</button></router-link>
-                    <router-link to="/education"><button class="submit-btn" type="submit" :disabled="!isDisabledNextPage">შემდეგი</button></router-link>
+                    <button class="submit-btn" type="submit" @click="nextPage">შემდეგი</button>
                     </div>
                     </form>
             </div>
@@ -83,7 +84,7 @@ import ExperienceResume from '../resume/experienceresume.vue'
 export default {
     data(){
         return {
-            divs: [{value: "", value2: ""}],
+            divs: [{value: "", value2: "", value3: "",value4: ""}],
             positionValue: "",
             valid: "valid",
             notValid: "notvalid",
@@ -157,13 +158,6 @@ export default {
                 if(this.endDate != ""){
                 return this.valid
             }
-            },
-        isDisabledNextPage(){
-            if(this.positionValue.length >=2 && this.recruiteValue.length >=2 && this.textAreaValue.length >= 1){
-                return true
-            }else {
-                return false
-            }
         }
     },
     mounted(){
@@ -178,12 +172,12 @@ export default {
     },
     created(){
         const savedInputs = JSON.parse(localStorage.getItem("divs") || "[]");
-    this.divs = savedInputs;
+        this.divs = savedInputs;
     },
     methods: {
         createAdditionaInputs(e) {
             e.preventDefault();
-      this.divs.push({value: ""});
+      this.divs.push({value: "", value2: "", value3: "",value4: ""});
     },
     removeDiv(index){        
         this.divs.splice(index,1)
@@ -192,6 +186,13 @@ export default {
     goFirstPage(){
         localStorage.clear()
     },
+    nextPage(e){
+        e.preventDefault()
+        if(this.positionValue.length >= 2 && this.recruiteValue.length >= 2 
+        && this.startDate != "" && this.endDate != "" && this.textAreaValue != ""){
+            this.$router.push({ path: "/education" })
+        }
+    }
     }
 }
 </script>
@@ -278,6 +279,7 @@ hr {
 .gofirstpageimg {
     width: 40px;
     height: 40px;
+    margin-left: -60px;
 }
 
 form {

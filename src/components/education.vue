@@ -4,7 +4,7 @@
                 <div class="instute-info-header">
                     <div class="img-info-title">
                         <router-link to="/"><img @click="goFirstPage" class="gofirstpageimg" src="../assets/gofirstpagebtn.png"></router-link>
-                        <h1 class="info-title">განთლება</h1>
+                        <h1 class="info-title">განათლება</h1>
                     </div>
                     <h3 class="page-number">3/3</h3>
                 </div>
@@ -12,19 +12,20 @@
                 <form @submit="foo">
                         <div class="instute">
                             <h1 class="instute-alert">სასწავლებელი</h1>
-                            <input type="text" placeholder="სასწავლებელი" v-model="instute">
-                            <h6 class="warning">მინიმუმ 2 ასო</h6>
+                            <input type="text" placeholder="სასწავლებელი" v-bind:class="intituteClass" v-model="instute">
+                            <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
                     </div>
                     <div class="date-degree">
                         <div class="degree">
                             <h1>ხარისხი</h1>
                        <select v-model="degreeValue">
+                        <option value="" disabled selected>აირჩიეთ ხარისხი</option>
                         <option v-for="(item,index) in degreeResponse" :value="item.id"  :key="index">{{ item.title }}</option>
                        </select>
                         </div>
                         <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="date" v-model="duedate"  >
+                            <input type="date" v-model="duedate"  v-bind:class="dueDateClass">
                         </div>
                     </div>
                     <div class="description">
@@ -34,37 +35,40 @@
                       <div id="container" v-for="(item, index) in edu">
                           <div  :key="index">
                              <hr style="width: 100%">
-                            <div  class="ss">
-                                <h1 class="position-s">თანამდებოდა</h1>
-                            <input  type="text" placeholder="დეველოპერი, დიზაინერი ა.შ" >
-                            <h6 class="warning">მინიმუმ 2 ასო, ქართული ასოები</h6>
+                            <div style="margin-top: 20px;" class="instute">
+                                <h1 class="instute-alert">სასწავლებელი</h1>
+                            <input  type="text" placeholder="სასწავლებელი">
+                            <h6 class="warning">მინიმუმ 2 სიმბოლო</h6>
                              </div>
-                              <div class="ss">
-                                <div class="ss">
-                            <h1>დაწყების რიცხვი</h1>
-                       <input type="ss" >
+                             <div class="date-degree">
+                        <div class="degree">
+                            <h1>ხარისხი</h1>
+                       <select v-model="degreeValue">
+                        <option value="" disabled selected>აირჩიეთ ხარისხი</option>
+                        <option v-for="(item,index) in degreeResponse" :value="item.id"  :key="index">{{ item.title }}</option>
+                       </select>
                         </div>
-                        <div class="ss">
+                        <div class="enddate">
                             <h1>დამთავრების რიცხვი</h1>
-                            <input type="ss" >
+                            <input type="date" v-model="duedate" >
                         </div>
-                             </div>
-                              <div class="ss">
-                                <h1>აღწერა</h1>
-                                  <textarea type="text"></textarea>
-                              </div>
+                    </div>
+                    <div class="description">
+                        <h1>აღწერა</h1>
+                       <textarea v-bind:class="textareaClass" v-model="educationdesc" placeholder="განათლების აღწერა" ></textarea>
+                    </div>
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
                              </div>
-                             <button class="add-more-experience-btn" @click="createAdditionaInputs">მეტი გამოცდილების დამატება</button>
+                             <button class="add-more-experience-btn" @click="createAdditionaInputs">სხვა სასწავლებელის fდამატება</button>
                     <div class="prev-next-btn">
-                        <router-link to='/experience'><button class="prev-page">უკან</button></router-link>
-                        <button class="submit-btn" @click="sendRequest">send request</button>
+                        <button @click="goback" class="prev-page">უკან</button>
+                        <button class="submit-btn" @click="sendRequest">დასრულება</button>
                     </div>
                     </form>
             </div>
         </div>
-        <EducationResume />
+        <EducationResume :institute="instute" :duedate="duedate" :educationDescription="educationdesc" />
 </template>
 <script>
 import axios from 'axios'
@@ -83,16 +87,18 @@ export default {
             start_date: localStorage.getItem("startdate"),
             enddate: localStorage.getItem("due_date"),
             position: localStorage.getItem("position"),
-            degree_id: JSON.parse(localStorage.getItem("degree")),
             recruiter: localStorage.getItem("recruiter"),
-            degree_id: localStorage.getItem("degree"),
+            degree_id: JSON.parse(localStorage.getItem("degree")),
             responseData: "",
-            edu: [],
+            edu: [{va: "", value2: "", value3: "",value4: ""}],
             degreeResponse: [],
             degreeValue: "",
             instute: "",
             duedate: "",
-            educationdesc: ""
+            educationdesc: "",
+            valid: "valid",
+            notvalid: "notvalid",
+            initial: "initiial"
 
 
         }
@@ -113,16 +119,45 @@ export default {
         },
         duedate(newDueDate){
             localStorage.setItem("educationduedate", newDueDate)
+        },
+        responseData: function(newValue){
+            if(this.instute.length >= 2 && this.degreeValue != "" &&
+            this.duedate != "" && this.educationdesc != ""){
+                if(newValue){
+                this.$router.push({path: "/result"})
+            }
+            }
+        }
+    },
+    computed: {
+        intituteClass(){
+            if(this.instute.length >= 2){
+                return this.valid
+            }else if (this.instute === ""){
+                return this.initial
+            }else if (this.instute.length > 0 && this.instute.length < 2){
+                return this.notvalid
+            }
+        },
+        textareaClass(){
+            if(this.educationdesc != ""){
+                return this.valid
+            }
+        },
+        dueDateClass(){
+            if(this.duedate != ""){
+                return this.valid
+            }
         }
     },
     mounted(){
         if (localStorage.getItem("educationdivs")) {
-      this.edu = JSON.parse(localStorage.getItem("educationdivs"));
-    }
-    this.instute = localStorage.getItem("institue") || ""
-    this.educationdesc = localStorage.getItem("educationdesc") || ""
-    this.degreeValue = localStorage.getItem("degree") || ""
-    this.duedate = localStorage.getItem("educationduedate") || ""
+            this.edu = JSON.parse(localStorage.getItem("educationdivs"));
+        }
+        this.instute = localStorage.getItem("institue") || ""
+        this.educationdesc = localStorage.getItem("educationdesc") || ""
+        this.degreeValue = localStorage.getItem("degree") || ""
+        this.duedate = localStorage.getItem("educationduedate") || ""
     },
     created(){
         axios.get('https://resume.redberryinternship.ge/api/degrees').then(res => {
@@ -131,66 +166,72 @@ export default {
                 this.degreeResponse.push(degreeValue[i])
             }
         })
+        const savedInputs = JSON.parse(localStorage.getItem("divs") || "[]");
+        this.divs = savedInputs;
     },
     methods: {
         createAdditionaInputs(e) {
-            e.preventDefault();
-      this.edu.push('');
-      localStorage.setItem('educationdivs', JSON.stringify(this.edu))
-    },
-    removeDiv(index){
-        this.edu.splice(index,1)
-        localStorage.setItem('educationdivs', JSON.stringify(this.edu))
-        
-    },
-        dataURLtoBlob(dataURL){
-  var parts = dataURL.split(',');
-  var mime = parts[0].split(':')[1].split(';')[0];
-  var binary = atob(parts[1]);
-  var array = [];
-  for (var i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
-  }
-  return new Blob([new Uint8Array(array)], {
-    type: mime
-  });
-},
-        async sendRequest(e){
             e.preventDefault()
-            var imageData = localStorage.getItem("image")
-            var blob = this.dataURLtoBlob(imageData)
-        formData.append("name", this.name)
-        formData.append("surname", this.surname)
-        formData.append("email", this.email)
-        formData.append("phone_number", this.phone_number)
-        formData.append("about_me", "kaia")
-        formData.append("image",  blob, 'image.' + blob.type.split('/')[1]);
-        formData.append("experiences[0][position]", this.position)
-        formData.append("experiences[0][employer]", this.recruiter)
-        formData.append("experiences[0][start_date]", this.start_date)
-        formData.append("experiences[0][due_date]", this.start_date)
-        formData.append("experiences[0][description]", this.experienceDescription)
-        formData.append("educations[0][institute]", this.instute)
-        formData.append("educations[0][degree_id]", this.degree_id)
-        formData.append("educations[0][due_date]", this.duedate)
-        formData.append("educations[0][description]", this.educationdesc)
-        try{
-            const response = await axios.post("https://resume.redberryinternship.ge/api/cvs", formData, {
-                headers: {
-                    "Content-Type" : "multipart/form-data"
+            this.edu.push({va: "", value2: "", value3: "",value4: ""});
+        },
+        removeDiv(index){
+            this.edu.splice(index,1)
+            localStorage.setItem('educationdivs', JSON.stringify(this.edu))
+        },
+        dataURLtoBlob(dataURL){
+            var parts = dataURL.split(',');
+            var mime = parts[0].split(':')[1].split(';')[0];
+            var binary = atob(parts[1]);
+            var array = [];
+            for (var i = 0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i));
+            }
+            return new Blob([new Uint8Array(array)], {
+                type: mime
+             });
+            },
+            async sendRequest(e){
+                e.preventDefault()
+                var imageData = localStorage.getItem("image")
+                var blob = this.dataURLtoBlob(imageData)
+                formData.append("name", this.name)
+                formData.append("surname", this.surname)
+                formData.append("email", this.email)
+                formData.append("phone_number", this.phone_number)
+                formData.append("about_me", "kaia")
+                formData.append("image",  blob, 'image.' + blob.type.split('/')[1]);
+                formData.append("experiences[0][position]", this.position)
+                formData.append("experiences[0][employer]", this.recruiter)
+                formData.append("experiences[0][start_date]", this.start_date)
+                formData.append("experiences[0][due_date]", this.start_date)
+                formData.append("experiences[0][description]", this.experienceDescription)
+                formData.append("educations[0][institute]", this.instute)
+                formData.append("educations[0][degree_id]", this.degreeValue)
+                formData.append("educations[0][due_date]", this.duedate)
+                formData.append("educations[0][description]", this.educationdesc)
+                try{
+                    const response = await axios.post("https://resume.redberryinternship.ge/api/cvs", formData, {
+                        headers: {
+                            "Content-Type" : "multipart/form-data"
+                        }
+                    })
+                    this.responseData = response.data
+                    store.commit("updateInfo",this.responseData)
+                    console.log(response.data);
+                }catch(er){
+                    console.log(er);
                 }
-            })
-            this.responseData = response.data
-            store.commit("updateInfo",this.responseData)
-            localStorage.setItem("response", this.responseData)
-        console.log(response.data);
-        }catch(er){
-            console.log(er);
+            },
+            goback(e){
+                e.preventDefault()
+                this.$router.push({ path: "/experience" })
+            },
+            goFirstPage(){
+                localStorage.clear()
+                this.$router.push({ path: "/" })
+            }
         }
-        this.$router.push({path: "/result"})
-    },
-    }
-}
+        }
 </script>
 <style scoped>
    * {
@@ -220,6 +261,13 @@ export default {
     background-size: 20px 20px;
     background-position: 99% center;
 }
+
+.initial {
+    border-radius: 3px;
+    border: none;
+    outline: none;
+}
+
 
 .info {
     width: 55%;

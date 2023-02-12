@@ -23,15 +23,28 @@
                 <hr style="background-color: black; margin-top: 20px; margin-bottom: 10px;">
         <div class="experience-div">
             <h1 class="position" style="font-size: 18px;">გამოცდილება</h1>
-            {{ startDate }}
-            <h1 class="pos-rec">{{ position }} {{ recruiter }}</h1>
-            <h2 class="experiencedesc">{{ experienceDescription }}</h2>
+            <div class="fullpos">
+                <h1 class="pos-rec">{{ position }} {{ recruiter }}</h1>
+                <h1 v-for="(item,indnex) in experinceAddedinputs"> {{ item.value }}</h1>
+            </div>
+            <h3>{{ startDate }} {{ endDate }}</h3>
+            <div class="desc" style="display: flex;">
+                <h2 class="experiencedesc">{{ experienceDescription }}</h2>
+                <h2 style="margin-left: 5px;" v-for="(desc,index) in experinceAddedinputs"> {{ desc.value2 }}</h2>
+            </div>
         </div>
         <hr>
         <div class="education-div">
-            {{ institute }}
-            {{ due_date }}
-            {{ educdesc }}
+            <h1 v-if="institute || duedate || educationDescription">განათლება</h1>
+            <div class="inst">
+                <h2>{{ institute }}</h2>
+            </div>
+            <div class="due-date">
+                <h3>{{ duedate }}</h3>
+            </div>
+            <div class="educationdescription">
+               <p>{{ educationDescription }}</p>
+            </div>
         </div>
             </div>
             <img :src="image" class="userimage" >
@@ -53,44 +66,26 @@ export default {
             startDate: localStorage.getItem("startdate"),
             endDate: localStorage.getItem("enddate"),
             experienceDescription: localStorage.getItem("textareadecription"),
-            institute: localStorage.getItem("institue"),
-            due_date: localStorage.getItem("educationduedate"),
-            educdesc: localStorage.getItem("educationdesc")
+            experinceAddedinputs: JSON.parse(localStorage.getItem("divs"))
         }
     },
     props: {
-        positionValue: {
+        institute: {
             type: String,
-            require: false
+            required: false
         },
-        newPositionValue: {
-            type: Array,
-            require: false
-        },
-        startDate: {
+        duedate: {
             type: String,
-            require: false
+            required: false
         },
-        endDate: {
+        educationDescription: {
             type: String,
-            require: false
-        },
-        recruiterValue: {
-            type: String,
-            require: false
-        },
-        textAreaValue: {
-            type: String,
-            require: false
-        },
-        newTextArea: {
-            type: Array,
-            require: false
+            required: false
         }
 
     },
     mounted() {
-        console.log(this.startDate);
+        console.log(this.experinceAddedinputs);
     },
 }
 </script>
@@ -184,24 +179,64 @@ export default {
     color: #F93B1D;
 }
 .position {
-    font-size: 26px;
+    font-size: 18px;
     font-weight: bold;
     color: #F93B1D;
     font-family: HelveticaNeue;
+    margin-bottom: 20px;
 }
 
-.pos-rec {
+.experiencedesc{
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     font-family: HelveticaNeue;
     margin-bottom: 20px;
 }
-.experiencedesc{
-    margin-top: 10px;
+
+.education-div {
+    margin-top: 20px;
+}
+
+
+.experience-div h3 {
+    font-size: 16px;
+    color: grey;
+}
+.education-div h1 {
+    color:#F93B1D;
     font-size: 18px;
-    font-weight: bold;
-    font-family: HelveticaNeue;
+}
+
+.inst h2 {
+    margin-top: 10px;
+    font-size: 16px;
+}
+.due-date {
+    color: grey;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.educationdescription p {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.fullpos {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
     margin-bottom: 20px;
+}
+
+.fullpos h1{
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.desc h2 {
+    font-size: 16px;
+    margin-top: 10px;
 }
 </style>

@@ -32,13 +32,13 @@
                     </div>
                     <div class="email-field">
                         <h1>ელ.ფოსტა</h1>
-                       <input type="text" v-model="email" v-bind:class="emailInput" placeholder="ელ.ფოსტა">
+                       <input type="text" v-model="email" v-bind:class="emailInput" placeholder="ელ.ფოსტა უნდა მთავრდებოდეს @redberry.ge">
                     </div>
                     <div class="phone-number">
                         <h1>მობილური ნომერი</h1>
                        <input type="text" v-model="phoneText" v-bind:class="phoneInput" placeholder="+995 959 16 11 11">
                     </div>
-                        <router-link to="/experience"><button class="submit-btn" type="submit" :disabled="!isDisabled">შემდეგი</button></router-link>
+                       <button class="submit-btn" type="submit" @click="nextPage" >შემდეგი</button>
                     </form>
             </div>
         </div>
@@ -104,17 +104,17 @@ export default {
        this.textareaText = localStorage.getItem("description") || ""
     },
     computed: {
-        isDisabled(){
-            if(this.name.match(this.geoRegex) && this.name.length >= 2 
-            && this.surname.match(this.geoRegex) && this.surname.length >= 2 &&
-            this.picture.length != 0 && this.email.match(this.emailRegex) && 
-            this.phoneText.match(this.phoneRegex)){
-                return true
-            }
-            else {
-                return false
-            }
-        },
+        // isDisabled(){
+        //     if(this.name.match(this.geoRegex) && this.name.length >= 2 
+        //     && this.surname.match(this.geoRegex) && this.surname.length >= 2 &&
+        //     this.picture.length != 0 && this.email.match(this.emailRegex) && 
+        //     this.phoneText.match(this.phoneRegex)){
+        //         return true
+        //     }
+        //     else {
+        //         return false
+        //     }
+        // },
         nameInput(){
             if(this.name.length >= 2 && this.name.match(this.geoRegex)){
                 return this.valid
@@ -171,10 +171,15 @@ export default {
         goFirstPage(){
             localStorage.clear()
         },
-        foo(e){
+        nextPage(e){
             e.preventDefault();
-            console.log('nice');
-        },
+            if(this.name.match(this.geoRegex) && this.name.length >= 2 
+             && this.surname.match(this.geoRegex) && this.surname.length >= 2 &&
+             this.picture.length != 0 && this.email.match(this.emailRegex) && 
+             this.phoneText.match(this.phoneRegex)){
+                this.$router.push({ path: "/experience" })
+             }
+        }
     }
 }
 </script>
@@ -236,6 +241,7 @@ hr {
 .gofirstpageimg {
     width: 40px;
     height: 40px;
+    margin-left: -60px;
 }
 
 form {
@@ -268,6 +274,7 @@ form {
     background-size: 20px 20px;
     background-position: 99% center;
 }
+
 
 .initial {
     border-radius: 3px;
