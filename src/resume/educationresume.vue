@@ -26,6 +26,7 @@
             <div class="fullpos">
                 <h1 class="pos-rec">{{ position }} {{ recruiter }}</h1>
                 <h1 v-for="(item,indnex) in experinceAddedinputs">{{ item.value }}</h1>
+                <h1  v-for="(desc,index) in experinceAddedinputs"> {{ desc.value5 }}</h1>
             </div>
             <h3>{{ startDate }} {{ endDate }}</h3>
             <h3  v-for="(start,index) in experinceAddedinputs"> {{ start.value3 }}</h3>
