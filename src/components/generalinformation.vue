@@ -62,7 +62,7 @@ export default {
             textareaText: "",
             email: "",
             geoRegex: /^[ა-ჰ]+$/g,
-            emailRegex: /^\w+([\.-]?\w+)*@redberry.ge/,
+            emailRegex: /^[a-zA-Z0-9_.+-]+@redberry\.ge$/,
             vector: [Vector],
             picture: [],
             emailinput: "email-field input",

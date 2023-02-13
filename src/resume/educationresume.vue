@@ -25,12 +25,14 @@
             <h1 class="position" style="font-size: 18px;">გამოცდილება</h1>
             <div class="fullpos">
                 <h1 class="pos-rec">{{ position }} {{ recruiter }}</h1>
-                <h1 v-for="(item,indnex) in experinceAddedinputs"> {{ item.value }}</h1>
+                <h1 v-for="(item,indnex) in experinceAddedinputs">{{ item.value }}</h1>
             </div>
             <h3>{{ startDate }} {{ endDate }}</h3>
-            <div class="desc" style="display: flex;">
+            <h3  v-for="(start,index) in experinceAddedinputs"> {{ start.value3 }}</h3>
+            <h3  v-for="(end,index) in experinceAddedinputs"> {{ end.value4 }}</h3>
+            <div class="desc" >
                 <h2 class="experiencedesc">{{ experienceDescription }}</h2>
-                <h2 style="margin-left: 5px;" v-for="(desc,index) in experinceAddedinputs"> {{ desc.value2 }}</h2>
+                <h2  v-for="(desc,index) in experinceAddedinputs"> {{ desc.value2 }}</h2>
             </div>
         </div>
         <hr>
@@ -239,15 +241,13 @@ export default {
 }
 
 .fullpos {
-    display: flex;
-    align-items: center;
     margin-top: 10px;
     margin-bottom: 20px;
 }
 
 .fullpos h1{
     font-size: 16px;
-    margin-left: 5px;
+    
 }
 
 .desc h2 {

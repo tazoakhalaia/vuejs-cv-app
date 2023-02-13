@@ -22,7 +22,7 @@
                     <img src="../assets/phone_logo.png">
                     <h3>{{ cvResult.phone_number }}</h3>
                 </div>
-                <div class="about-me">
+                <div class="about-me" style="word-break: break-all;">
                     <h1>ჩემს შესახებ</h1>
                     <p>{{ cvResult.about_me }}</p>
                 </div>
@@ -32,7 +32,7 @@
                 <h1>გამოცდილება</h1>
                 <div class="position-recruiter">
                     <h2>{{ cvResult.experiences[0].position }}</h2>
-                    <h2 style="margin-left: 10px;">{{ cvResult.experiences[0].employer }}</h2>
+                    <h2 >{{ cvResult.experiences[0].employer }}</h2>
                 </div>
                 <div class="start-end-date">
                     <h3>{{  cvResult.experiences[0].start_date }}</h3>
@@ -47,7 +47,7 @@
                 <h1>განათლება</h1>
                 <div class="institute-degree">
                 <h2>{{ cvResult.educations[0].institute }}</h2>
-                <h2 style="margin-left: 10px;">{{ cvResult.educations[0].degree }}</h2>
+                <h2>{{ cvResult.educations[0].degree }}</h2>
             </div>
             <div class="duedate">
                 <h3>{{ cvResult.educations[0].due_date }}</h3>
@@ -195,7 +195,6 @@ export default {
 
     .position-recruiter {
         margin-top: 10px;
-        display: flex;
     }
 
     .position-recruiter h2 {
@@ -227,7 +226,6 @@ export default {
     }
 
     .institute-degree {
-        display: flex;
         margin-top: 10px;
     }
 

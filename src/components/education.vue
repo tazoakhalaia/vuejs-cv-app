@@ -60,7 +60,7 @@
                               <button class="remove" @click="removeDiv(index)">წაშლა</button>
                             </div>
                              </div>
-                             <button class="add-more-experience-btn" @click="createAdditionaInputs">სხვა სასწავლებელის fდამატება</button>
+                             <button class="add-more-experience-btn" @click="createAdditionaInputs">სხვა სასწავლებელის დამატება</button>
                     <div class="prev-next-btn">
                         <button @click="goback" class="prev-page">უკან</button>
                         <button class="submit-btn" @click="sendRequest">დასრულება</button>
@@ -132,7 +132,8 @@ export default {
             if(this.instute.length >= 2 && this.degreeValue != "" &&
             this.duedate != "" && this.educationdesc != ""){
                 if(newValue){
-                this.$router.push({path: "/result"})
+                    localStorage.clear()
+                    this.$router.push({path: "/result"})
             }
             }
         },
@@ -172,7 +173,7 @@ export default {
         this.educationdesc = localStorage.getItem("educationdesc") || ""
         this.degreeValue = localStorage.getItem("degree") || ""
         this.duedate = localStorage.getItem("educationduedate") || ""
-        console.log(this.enddate);
+        console.log(this.degreeValue);
     },
     created(){
         axios.get('https://resume.redberryinternship.ge/api/degrees').then(res => {
@@ -181,8 +182,8 @@ export default {
                 this.degreeResponse.push(degreeValue[i])
             }
         })
-        const savedInputs = JSON.parse(localStorage.getItem("divs") || "[]");
-        this.divs = savedInputs;
+        const savedInputs = JSON.parse(localStorage.getItem("educationdivs") || "[]");
+        this.edu = savedInputs;
     },
     methods: {
         createAdditionaInputs(e) {
@@ -214,7 +215,7 @@ export default {
                 formData.append("surname", this.surname)
                 formData.append("email", this.email)
                 formData.append("phone_number", this.phone_number)
-                formData.append("about_me", "kaia")
+                formData.append("about_me", this.generalDescription)
                 formData.append("image",  blob, 'image.' + blob.type.split('/')[1]);
                 formData.append("experiences[0][position]", this.position)
                 formData.append("experiences[0][employer]", this.recruiter)
@@ -243,7 +244,6 @@ export default {
                 this.$router.push({ path: "/experience" })
             },
             goFirstPage(){
-                localStorage.clear()
                 this.$router.push({ path: "/" })
             }
         }

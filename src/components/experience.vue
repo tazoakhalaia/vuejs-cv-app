@@ -79,7 +79,10 @@
         :newPositionValue="divs"  
         :newTextArea="divs"
         :newRecruiter="divs"
-        :startDate="startDate" :endDate="endDate" 
+        :newStartDate="divs"
+        :newEndadate="divs"
+        :startDate="startDate" 
+        :endDate="endDate" 
         :recruiterValue="recruiteValue"
         :textAreaValue="textAreaValue"
         />
